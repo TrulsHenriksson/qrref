@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "qrpy"
+version = "0.0.1a"
+dependencies = [
+  "numpy",
+  "matplotlib",
+  "pillow",
+]
+
+[project.optional-dependencies]
+copy = [
+  "pyperclipimg"
+]
