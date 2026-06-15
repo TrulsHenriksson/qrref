@@ -1,6 +1,7 @@
 import itertools as it
 
 from qrpy.custom_types import *
+from qrpy.settings import SETTINGS
 from qrpy.table_data import BLOCK_TYPES
 
 
@@ -14,8 +15,8 @@ ALPHANUMERIC_VALUE = {
 ALPHANUMERIC_CHARS = set(ALPHANUMERIC_VALUE)
 ALPHANUMERIC_EXCLUSIVE_CHARS = ALPHANUMERIC_CHARS - NUMERIC_CHARS
 
-BYTE_CHARS = set(bytes(range(256)).decode("latin-1"))
-BYTE_EXCLUSIVE_CHARS = BYTE_CHARS - ALPHANUMERIC_CHARS
+LATIN_1_CHARS = set(bytes(range(256)).decode("latin-1"))
+LATIN_1_EXCLUSIVE_CHARS = LATIN_1_CHARS - ALPHANUMERIC_CHARS
 
 # Value to signal the end of a message stream
 TERMINATOR = (0, 0, 0, 0)
@@ -84,13 +85,14 @@ def encode_byte(content: str, version: int) -> Generator[Bit]:
     yield from (0, 1, 0, 0)
 
     # Character count indicator
+    encoded_content = content.encode(SETTINGS.byte_encoding)
     if version <= 9:  # Version 1-9
-        yield from to_bits(len(content), 8)
+        yield from to_bits(len(encoded_content), 8)
     else:  # Version 10-40
-        yield from to_bits(len(content), 16)
+        yield from to_bits(len(encoded_content), 16)
 
     # Data bitstream
-    for byte in content.encode("latin-1"):
+    for byte in encoded_content:
         yield from to_bits(byte, 8)
 
 

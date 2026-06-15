@@ -1,5 +1,6 @@
 import argparse
 
+from qrpy.settings import SETTINGS
 from qrpy.qr import (
     generate_qr_code,
     show_qr_code,
@@ -36,11 +37,14 @@ formats.add_argument("--copy", action="store_true", help="Copy image to clipboar
 
 parser.add_argument("-f", "--filename", help="Filename to save with", default="qr_code")
 parser.add_argument("-t", "--transparent", action="store_true", help="Use transparent background")
+parser.add_argument("-u", "--utf-8" , action="store_true", help="Use UTF-8 instead of Latin-1 encoding")
 parser.add_argument("--debug", action="store_true", help="Show debug output")
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    if args.utf_8:
+        SETTINGS.byte_encoding = "utf-8"
 
     # Find the selected ec_level, otherwise use "M"
     for ec_level, flag in zip(("L", "M", "Q", "H"), (args.L, args.M, args.Q, args.H)):

@@ -1,34 +1,41 @@
 from qrpy.custom_types import *
+from qrpy.settings import SETTINGS
 from qrpy.table_data import BLOCK_TYPES
 from qrpy.data_encoding import (
     NUMERIC_CHARS,
+    ALPHANUMERIC_CHARS,
     ALPHANUMERIC_EXCLUSIVE_CHARS,
-    BYTE_CHARS,
-    BYTE_EXCLUSIVE_CHARS,
+    LATIN_1_CHARS,
+    LATIN_1_EXCLUSIVE_CHARS,
 )
 
 
-def select_modes(content: str, version: int):
+def select_modes(content: str, version: int) -> list[tuple[str, Mode]]:
     """Select the modes that generates the shortest bitstream.
 
     Implements section J.2, page 100.
     """
+    # UTF-8 encoding cannot efficiently be selected to mix in with other modes,
+    # since different characters need different numbers of bytes to encode them.
+    if SETTINGS.byte_encoding != "latin-1" and any(char not in ALPHANUMERIC_CHARS for char in content):
+        return [(content, "byte")]
+
     def select(a: int, b: int, c: int) -> int:
         return a if version <= 9 else b if version <= 26 else c
 
     # Select initial mode according to J.2.a)
     current_char = content[0]
-    if current_char in BYTE_EXCLUSIVE_CHARS:
+    if current_char in LATIN_1_EXCLUSIVE_CHARS:
         current_mode = "byte"
     elif current_char in ALPHANUMERIC_EXCLUSIVE_CHARS:
         # Start with byte mode if any of the first 6/7/8 chars require it
-        if needs_mode(content[: select(6, 7, 8)], BYTE_EXCLUSIVE_CHARS):
+        if needs_mode(content[: select(6, 7, 8)], LATIN_1_EXCLUSIVE_CHARS):
             current_mode = "byte"
         else:
             current_mode = "alphanumeric"
     elif current_char in NUMERIC_CHARS:
         # Start with byte mode if any of the first 4/4/5 chars require it
-        if needs_mode(content[: select(4, 4, 5)], BYTE_EXCLUSIVE_CHARS):
+        if needs_mode(content[: select(4, 4, 5)], LATIN_1_EXCLUSIVE_CHARS):
             current_mode = "byte"
         # Start with alphanumeric mode if any of the first 7/8/9 chars require it
         elif needs_mode(content[: select(7, 8, 9)], ALPHANUMERIC_EXCLUSIVE_CHARS):
@@ -43,7 +50,7 @@ def select_modes(content: str, version: int):
     next_mode: Mode = current_mode
     # Select mode while moving through the content
     for i, current_char in enumerate(content[1:], start=1):
-        if current_char not in BYTE_CHARS:
+        if current_char not in LATIN_1_CHARS:
             raise ValueError(f"Character {current_char} at position {i} is not encodeable")
 
         # Update the next mode
@@ -55,12 +62,12 @@ def select_modes(content: str, version: int):
                 elif worth_switching(content, NUMERIC_CHARS, i, select(6, 8, 9)):
                     next_mode = "numeric"
             case "alphanumeric":
-                if current_char in BYTE_EXCLUSIVE_CHARS:
+                if current_char in LATIN_1_EXCLUSIVE_CHARS:
                     next_mode = "byte"
                 elif worth_switching(content, NUMERIC_CHARS, i, select(13, 15, 17)):
                     next_mode = "numeric"
             case "numeric":
-                if current_char in BYTE_EXCLUSIVE_CHARS:
+                if current_char in LATIN_1_EXCLUSIVE_CHARS:
                     next_mode = "byte"
                 elif current_char in ALPHANUMERIC_EXCLUSIVE_CHARS:
                     next_mode = "alphanumeric"
@@ -101,7 +108,7 @@ def mixed_encoding_length(modes: list[tuple[str, Mode]], version: int) -> int:
                 length += 4 + select(9, 11, 13) + (len(content) // 2) * 11
                 length += (0, 6)[len(content) % 2]
             case "byte":
-                length += 4 + select(8, 16, 16) + len(content) * 8
+                length += 4 + select(8, 16, 16) + len(content.encode(SETTINGS.byte_encoding)) * 8
             case _:
                 raise ValueError(f"Invalid mode {mode}")
     return length

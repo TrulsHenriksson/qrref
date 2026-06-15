@@ -1,5 +1,6 @@
 import pytest
 
+from qrpy.settings import SETTINGS
 from qrpy.data_encoding import (
     to_bits,
     to_byte,
@@ -43,6 +44,13 @@ def test_encode_byte():
         #  <mode> < length > <   å    > <   ä    > <   ö    >
         == "0100" "00000011" "11100101" "11100100" "11110110"
     )
+    SETTINGS.byte_encoding = "utf-8"
+    assert (
+        bitstring(encode_byte("åäö", version=1))
+        #  <mode> < length > <        å       > <       ä        > <       ö        >
+        == "0100" "00000110" "1100001110100101" "1100001110100100" "1100001110110110"
+    )
+    SETTINGS.byte_encoding = "latin-1"
 
 def test_encode_mixed():
     assert (

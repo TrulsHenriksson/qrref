@@ -1,5 +1,4 @@
 import pytest
-import itertools as it
 
 from qrpy.custom_types import ErrorCorrectionLevel, Mode, to_bits
 from qrpy.data_encoding import encode_alphanumeric, encode_byte, encode_numeric, to_data_bytestream
