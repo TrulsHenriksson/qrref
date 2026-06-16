@@ -16,14 +16,14 @@ from qrpy.table_data import BLOCK_TYPES, value_of_p
 
 def test_generating_polynomial():
     # Table A.1, page 73
-    assert [c.log() for c in generating_polynomial(2)[::-1]] == [
+    assert [c.log() for c in generating_polynomial(2)] == [
         0, 25, 1
     ]
-    assert [c.log() for c in generating_polynomial(7)[::-1]] == [
+    assert [c.log() for c in generating_polynomial(7)] == [
         0, 87, 229, 146, 149, 238, 102, 21
     ]
     # The 68th generating polynomial is $\alpha^0 x^{68} + \alpha^{247}x^{67} + \cdots$
-    assert [c.log() for c in generating_polynomial(68)[::-1]] == [
+    assert [c.log() for c in generating_polynomial(68)] == [
         0, 247, 159, 223, 33, 224, 93, 77, 70, 90, 160, 32, 254, 43, 150, 84,
         101, 190, 205, 133, 52, 60, 202, 165, 220, 203, 151, 93, 84, 15, 84,
         253, 173, 160, 89, 227, 52, 199, 97, 95, 231, 52, 177, 41, 125, 137,
@@ -32,15 +32,15 @@ def test_generating_polynomial():
     ]
 
 def test_polynomial_remainder():
-    a = [10.0, 43.0, 66.0, 87.0, 76.0, 36.0, 16.0]
-    g = [ 4.0,  6.0,  3.0,  2.0]
+    a = [16.0, 36.0, 76.0, 87.0, 66.0, 43.0, 10.0]
+    g = [ 2.0,  3.0,  6.0,  4.0]
     # Long division steps:
-    #    10    43    66    87    76    36    16
-    #    10    43    66    55    28    12     0    -8x^3 * g
-    #    10    43    42    19    10     0          -6x^2 * g
-    #    10    23    12     4     0                -5x   * g
-    #     2    11     6     0                      -2    * g
-    assert polynomial_remainder(a, g) == [2.0, 11.0, 6.0]
+    #    16    36    76    87    66    43    10
+    #     0    12    28    55    66    43    10      -8x^3 * g
+    #           0    10    19    42    43    10      -6x^2 * g
+    #                 0     4    12    23    10      -5x   * g
+    #                       0     6    11     2      -2    * g
+    assert polynomial_remainder(a, g) == [6.0, 11.0, 2.0]
 
 def test_blockstream_length():
     for ec_level in ("L",):  # Others omitted for time reasons

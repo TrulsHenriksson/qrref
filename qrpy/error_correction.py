@@ -17,43 +17,43 @@ VERSION_GENERATOR_POLYNOMIAL = 0b1111100100101
 
 @functools.cache
 def generating_polynomial(order: int) -> list[GFE]:
-    """Get the generating polynomial of a given order.
-    
+    """Get the generating polynomial of a given order, given by `(x+2^0)(x+2^1)...(x+2^order)`.
+
     Cached (memoized) for speed and reusability.
 
-    Polynomials are here given by their coefficients, ordered from lowest to
-    highest power. So `1 + 3x + 2x^3` would be `[1, 3, 0, 2]`.
+    Polynomials are here given by their coefficients, ordered from highest to
+    lowest power. So `2x^3 + 3x + 1` would be `[2, 0, 3, 1]`.
     """
     if order <= 0:
         raise ValueError("order must be at least 1")
     if order == 1:
         one = GFE(1)
-        return [one, one]  # $(\alpha^0 + x)$
+        return [one, one]  # $(x + \alpha^0)$
 
     polynomial = generating_polynomial(order - 1)
     zero = GFE(0)
     alpha = GFE.exp(1)  # Element of order 255
 
-    # Multiply polynomial by $(\alpha^i + x)$
+    # Multiply polynomial by $(x + \alpha^i)$
     factor = alpha**(order - 1)
-    times_factor = [factor * c for c in polynomial] + [zero]
-    times_x = [zero] + polynomial
+    times_factor = [zero] + [factor * c for c in polynomial]
+    times_x = polynomial + [zero]
     polynomial = [c1 + c2 for c1, c2 in zip(times_factor, times_x)]
     return polynomial
 
 
 def polynomial_remainder[T: FieldElement](a: Sequence[T], g: Sequence[T]) -> list[T]:
-    """Calculate the remainder after polynomial division of `a` by `g`."""
-    # Easier to work with in highest-exponent-first order
-    result = list(a)[::-1]
-    g = g[::-1]
+    """Calculate the remainder after polynomial division of `a` by `g`.
+
+    The coefficients are assumed to be in highest-exponent-first order.
+    """
+    result = list(a)
     for i in range(len(a) - len(g) + 1):
         c = result[i] / g[0]
         # Subtract $c \cdot x^i g$ from result
         for j in range(len(g)):
             result[i + j] -= c * g[j]
-    # Return in lowest-exponent-first order
-    return result[-1 : -len(g) : -1]
+    return result[-(len(g) - 1) :]
 
 
 def generate_error_correction_blocks(
@@ -76,13 +76,13 @@ def generate_error_correction_blocks(
             # Grab the next k bytes
             data_block = [next(bytestream) for i in range(k)]
 
-            # Coefficients of the data polynomial
-            coefficients = [GFE(0)] * (c - k) + [GFE(byte) for byte in reversed(data_block)]
+            # Coefficients of the data polynomial, highest exponent first
+            coefficients = [GFE(byte) for byte in data_block] + [GFE(0)] * (c - k)
             g = generating_polynomial(c - k)
             ec_coefficients = polynomial_remainder(coefficients, g)
 
             # Convert to error correction bytes
-            ec_block = [c.value for c in reversed(ec_coefficients)]
+            ec_block = [c.value for c in ec_coefficients]
             yield data_block, ec_block
 
 
