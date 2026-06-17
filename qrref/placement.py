@@ -1,7 +1,7 @@
 import numpy as np
 
-from qrpy.custom_types import *
-from qrpy.table_data import modules_per_side
+from qrref.custom_types import *
+from qrref.table_data import modules_per_side
 
 
 # Distance from the last to second-to-last alignment patterns. The first and last

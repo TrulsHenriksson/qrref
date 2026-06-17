@@ -1,7 +1,7 @@
 import pytest
 
-from qrpy.settings import SETTINGS, temporary_settings
-from qrpy.data_encoding import (
+from qrref.settings import SETTINGS, temporary_settings
+from qrref.data_encoding import (
     to_bits,
     to_byte,
     encode_numeric,

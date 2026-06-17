@@ -2,7 +2,7 @@ import pytest
 
 import numpy as np
 
-from qrpy.masking import (
+from qrref.masking import (
     pattern_masks,
     run_lengths,
     run_length_penalty,

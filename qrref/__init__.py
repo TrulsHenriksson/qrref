@@ -1,4 +1,4 @@
-from qrpy.qr import generate_qr_code, show_qr_code, save_qr_code
+from qrref.qr import generate_qr_code, show_qr_code, save_qr_code
 
 
 __all__ = [

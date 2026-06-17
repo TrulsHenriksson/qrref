@@ -1,6 +1,6 @@
 import pytest
 
-from qrpy.placement import (
+from qrref.placement import (
     ALIGNMENT_PATTERN_SPACING,
     alignment_pattern_axis_positions,
     alignment_pattern_coordinates,
@@ -9,7 +9,7 @@ from qrpy.placement import (
     get_data_mask,
     place_bytestream,
 )
-from qrpy.table_data import (
+from qrref.table_data import (
     BLOCK_TYPES,
     function_pattern_modules,
     format_and_version_modules,

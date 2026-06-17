@@ -1,8 +1,8 @@
 import pytest
 
-from qrpy.custom_types import ErrorCorrectionLevel, Mode, to_bits
-from qrpy.data_encoding import encode_alphanumeric, encode_byte, encode_numeric, to_data_bytestream
-from qrpy.error_correction import (
+from qrref.custom_types import ErrorCorrectionLevel, Mode, to_bits
+from qrref.data_encoding import encode_alphanumeric, encode_byte, encode_numeric, to_data_bytestream
+from qrref.error_correction import (
     generate_version_bits,
     generating_polynomial,
     polynomial_remainder,
@@ -10,8 +10,8 @@ from qrpy.error_correction import (
     interleave_blocks,
     generate_format_bits,
 )
-from qrpy.galois_field import GFE
-from qrpy.table_data import BLOCK_TYPES, value_of_p
+from qrref.galois_field import GFE
+from qrref.table_data import BLOCK_TYPES, value_of_p
 
 
 def test_generating_polynomial():

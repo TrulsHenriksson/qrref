@@ -7,22 +7,22 @@ try:
 except ImportError:
     COPY_ENABLED = False
 
-from qrpy.custom_types import *
-from qrpy.data_analysis import (
+from qrref.custom_types import *
+from qrref.data_analysis import (
     select_modes,
     select_version,
 )
-from qrpy.data_encoding import (
+from qrref.data_encoding import (
     encode_mixed,
     to_data_bytestream,
 )
-from qrpy.error_correction import (
+from qrref.error_correction import (
     generate_error_correction_blocks,
     interleave_blocks,
     generate_format_bits,
     generate_version_bits,
 )
-from qrpy.placement import (
+from qrref.placement import (
     place_bytestream,
     insert_finder_patterns,
     insert_alignment_patterns,
@@ -31,7 +31,7 @@ from qrpy.placement import (
     place_version_bits,
     expand_quiet_region,
 )
-from qrpy.masking import (
+from qrref.masking import (
     apply_mask,
 )
 

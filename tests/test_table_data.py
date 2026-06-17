@@ -1,7 +1,7 @@
 import pytest
 
 
-from qrpy.table_data import (
+from qrref.table_data import (
     BLOCK_TYPES,
     modules_per_side,
     function_pattern_modules,

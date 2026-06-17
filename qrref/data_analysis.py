@@ -1,7 +1,7 @@
-from qrpy.custom_types import *
-from qrpy.settings import SETTINGS
-from qrpy.table_data import BLOCK_TYPES
-from qrpy.data_encoding import (
+from qrref.custom_types import *
+from qrref.settings import SETTINGS
+from qrref.table_data import BLOCK_TYPES
+from qrref.data_encoding import (
     NUMERIC_CHARS,
     ALPHANUMERIC_CHARS,
     ALPHANUMERIC_EXCLUSIVE_CHARS,

@@ -1,7 +1,7 @@
 import pytest
 
-from qrpy.data_encoding import encode_mixed
-from qrpy.data_analysis import (
+from qrref.data_encoding import encode_mixed
+from qrref.data_analysis import (
     select_modes,
     mixed_encoding_length,
     integer_secant_method,

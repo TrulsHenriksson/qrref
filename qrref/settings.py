@@ -1,4 +1,4 @@
-from qrpy.custom_types import *
+from qrref.custom_types import *
 from dataclasses import dataclass
 from contextlib import contextmanager
 

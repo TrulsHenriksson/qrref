@@ -1,8 +1,8 @@
 import numpy as np
 
-from qrpy.custom_types import Symbol
-from qrpy.table_data import modules_per_side
-from qrpy.placement import get_data_mask
+from qrref.custom_types import Symbol
+from qrref.table_data import modules_per_side
+from qrref.placement import get_data_mask
 
 
 # Base penalty for a run of same-colored modules of length >= 5

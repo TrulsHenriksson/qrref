@@ -2,9 +2,9 @@ import numpy as np
 
 import functools
 
-from qrpy.custom_types import *
-from qrpy.table_data import BLOCK_TYPES
-from qrpy.galois_field import GFE
+from qrref.custom_types import *
+from qrref.table_data import BLOCK_TYPES
+from qrref.galois_field import GFE
 
 
 # Constant mask that guarantees the format bit string is never all zeros
@@ -17,7 +17,7 @@ VERSION_GENERATOR_POLYNOMIAL = 0b1111100100101
 
 @functools.cache
 def generating_polynomial(order: int) -> list[GFE]:
-    """Get the generating polynomial of a given order, given by `(x+2^0)(x+2^1)...(x+2^order)`.
+    """Get the generating polynomial of a given order, given by `(x+2^0)(x+2^1)...(x+2^(order-1))`.
 
     Cached (memoized) for speed and reusability.
 

@@ -1,4 +1,4 @@
-# qrpy
+# qrref
 
 Python package and reference implementation of the ISO/IEC 18004:2015 Standard for QR codes, with a simple but convenient CLI for showing, saving and copying generated QR codes.
 
@@ -22,36 +22,36 @@ The priorities of this project have been as follows, in approximate order of imp
 
 # Usage
 
-The project is implemented as a Python package. Install it by cloning the repository, and then in the `qrpy` folder running
+The project is implemented as a Python package. Install it by cloning the repository, and then in the `qrref` folder running
 ```bash
-$ pip install .
+$ pip install qrref
 ```
 or to also be able to copy QR codes directly to the clipboard, by running
 ```bash
-$ pip install .[copy]
+$ pip install qrref[copy]
 ```
 This is an optional dependency, since it uses `pyperclipimg` which states in its README: "This module is separate [from pyperclip] because it has some heavy dependencies (pywin32, Quartz, etc.)"
 
-You can then `import qrpy` and use `qrpy.generate_qr_code` in your own code, or use the command-line interface (CLI) directly.
+You can then `import qrref` and use `qrref.generate_qr_code` in your own code, or use the command-line interface (CLI) directly.
 
 ## Examples
 
 Show a QR code with the message "This is a QR code". This is done using Matplotlib, which means that "F" toggles fullscreen and "Q" closes the window. Perfect for quickly throwing up a QR code on a big screen.
 ```bash
-$ py -m qrpy "This is a QR code"
+$ py -m qrref "This is a QR code"
 ```
 Save the QR code to `./wikipedia_qr.png`:
 ```bash
-$ py -m qrpy "https://wikipedia.org" --png --filename wikipedia_qr
+$ py -m qrref "https://wikipedia.org" --png --filename wikipedia_qr
 ```
-Copy the QR code to the clipboard (requires installing with `pip install .[copy]`):
+Copy the QR code to the clipboard (requires installing with `pip install qrref[copy]`):
 ```bash
-$ py -m qrpy "https://wikipedia.org" --copy
+$ py -m qrref "https://wikipedia.org" --copy
 ```
 
 # Reference details
 
-The generation of a QR code is handled by `qrpy.qr.generate_qr_code`. This function is fairly readable and illustrates the process from start to finish:
+The generation of a QR code is handled by `qrref.qr.generate_qr_code`. This function is fairly readable and illustrates the process from start to finish:
 
 ```python
 def generate_qr_code(
@@ -85,14 +85,14 @@ def generate_qr_code(
 ```
 
 This uses functions split up over several files. Here's a high-level overview of what each file does, in the order they are used in the above function.
-1. `qrpy/data_analysis.py`: Select the minimum version (qr code size) that the content (input string) fits in. Also select the encoding types that minimizes the length of the data bitstream (numeric data is denser than alphanumeric data, which is denser than byte data).
-2. `qrpy/data_encoding.py`: Encode the message into a bitstream and group the bits together into bytes.
-3. `qrpy/error_correction.py`: Generate error correction bytes using the Reed-Solomon codes. In practice, does this by finding polynomial remainders over the Galois Field of order 256 ([wikipedia](https://en.wikipedia.org/wiki/Finite_field_arithmetic)), which also uses `qrpy/galois_field.py`. Turn the resulting data and error correction bytes into a bitstream by splitting them into blocks and interleaving those blocks. Also generate the format and version bits after the masking is complete.
-4. `qrpy/placement.py`: Place the finalized bitstream into the symbol, as well as finder, alignment and timing patterns. After the format and version bits are generated, place those too.
-5. `qrpy/masking.py`: Find and apply the mask that minimizes undesirable patterns, like long runs of the same color, etc. This is done after placing everything but the format and version bits in the symbol.
+1. `qrref/data_analysis.py`: Select the minimum version (qr code size) that the content (input string) fits in. Also select the encoding types that minimizes the length of the data bitstream (numeric data is denser than alphanumeric data, which is denser than byte data).
+2. `qrref/data_encoding.py`: Encode the message into a bitstream and group the bits together into bytes.
+3. `qrref/error_correction.py`: Generate error correction bytes using the Reed-Solomon codes. In practice, does this by finding polynomial remainders over the Galois Field of order 256 ([wikipedia](https://en.wikipedia.org/wiki/Finite_field_arithmetic)), which also uses `qrref/galois_field.py`. Turn the resulting data and error correction bytes into a bitstream by splitting them into blocks and interleaving those blocks. Also generate the format and version bits after the masking is complete.
+4. `qrref/placement.py`: Place the finalized bitstream into the symbol, as well as finder, alignment and timing patterns. After the format and version bits are generated, place those too.
+5. `qrref/masking.py`: Find and apply the mask that minimizes undesirable patterns, like long runs of the same color, etc. This is done after placing everything but the format and version bits in the symbol.
 
 Auxiliary files:
-1. `qrpy/custom_types.py`: Custom types for type hinting throughout the package.
-2. `qrpy/qr.py`: Assemble and visualize the QR code.
-3. `qrpy/settings.py`: Global settings. Currently only one, which is the encoding to use for byte strings (Latin-1 or UTF-8).
-4. `qrpy/table_data.py`: Data from tables, either in the form of dictionaries or functions.
+1. `qrref/custom_types.py`: Custom types for type hinting throughout the package.
+2. `qrref/qr.py`: Assemble and visualize the QR code.
+3. `qrref/settings.py`: Global settings. Currently only one, which is the encoding to use for byte strings (Latin-1 or UTF-8).
+4. `qrref/table_data.py`: Data from tables, either in the form of dictionaries or functions.

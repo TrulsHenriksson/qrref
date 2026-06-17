@@ -1,6 +1,6 @@
 import pytest
 
-from qrpy.galois_field import EXP, LOG, GFE
+from qrref.galois_field import EXP, LOG, GFE
 
 
 def test_EXP_inverse():

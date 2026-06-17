@@ -1,6 +1,6 @@
 import numpy as np
 
-from qrpy.custom_types import Byte
+from qrref.custom_types import Byte
 
 
 # Coefficients of $\alpha^i$ mod 2 and $x^8+x^4+x^3+x^2+1$ where $\alpha=x$

@@ -1,4 +1,4 @@
-from qrpy.custom_types import ErrorCorrectionLevel
+from qrref.custom_types import ErrorCorrectionLevel
 
 
 # BLOCK_TYPES[error_correction_level][version] = [*(num_blocks, c, k)]

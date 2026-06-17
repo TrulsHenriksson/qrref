@@ -3,8 +3,11 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "qrpy"
-version = "0.0.1a"
+name = "qrref"
+version = "0.1.0"
+description = "QR code generator with a command-line interface for showing, saving and copying generated QR codes."
+readme = "README.md"
+requires-python = ">=3.12"
 dependencies = [
   "numpy",
   "matplotlib",

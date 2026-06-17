@@ -1,8 +1,8 @@
 import itertools as it
 
-from qrpy.custom_types import *
-from qrpy.settings import SETTINGS
-from qrpy.table_data import BLOCK_TYPES
+from qrref.custom_types import *
+from qrref.settings import SETTINGS
+from qrref.table_data import BLOCK_TYPES
 
 
 NUMERIC_CHARS = set("0123456789")

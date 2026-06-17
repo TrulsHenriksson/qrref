@@ -1,7 +1,7 @@
 import argparse
 
-from qrpy.settings import SETTINGS
-from qrpy.qr import (
+from qrref.settings import SETTINGS
+from qrref.qr import (
     generate_qr_code,
     show_qr_code,
     save_qr_code,
