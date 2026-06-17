@@ -24,7 +24,7 @@ The priorities of this project have been as follows, in approximate order of imp
 
 # Usage
 
-The project is implemented as a Python package. Install it by cloning the repository, and then in the `qrref` folder running
+Install by running
 ```bash
 $ pip install qrref
 ```
@@ -32,7 +32,7 @@ or to also be able to copy QR codes directly to the clipboard, by running
 ```bash
 $ pip install qrref[copy]
 ```
-This is an optional dependency, since it uses `pyperclipimg` which states in its README: "This module is separate [from pyperclip] because it has some heavy dependencies (pywin32, Quartz, etc.)"
+This is an optional dependency, since it uses `pyperclipimg` which states in its README: "This module is separate [from pyperclip] because it has some heavy dependencies (pywin32, Quartz, etc.)" Without it, you can still show and save QR codes as png.
 
 You can then `import qrref` and use `qrref.generate_qr_code` in your own code, or use the command-line interface (CLI) directly.
 
