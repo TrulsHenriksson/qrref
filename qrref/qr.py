@@ -114,7 +114,7 @@ def save_qr_code(symbol: Symbol, file_path: str, transparent: bool = False):
 def copy_qr_code(symbol: Symbol, transparent: bool = False):
     if not COPY_ENABLED:
         raise ValueError(
-            "Copying QR codes is not enabled. Reinstall using `pip install qrpy[copy]` to enable."
+            "Copying QR codes is not enabled. Reinstall using `pip install qrref[copy]` to enable."
         )
 
     image = qr_to_pillow(symbol, transparent)
