@@ -36,6 +36,7 @@ formats.add_argument("--show", action="store_true", help="Show without saving (d
 formats.add_argument("--copy", action="store_true", help="Copy image to clipboard")
 
 parser.add_argument("-f", "--filename", help="Filename to save with", default="qr_code")
+parser.add_argument("-w", "--width", default=500, type=int, help="Minimum width of the image, in pixels")
 parser.add_argument("-t", "--transparent", action="store_true", help="Use transparent background")
 parser.add_argument("-u", "--utf-8" , action="store_true", help="Use UTF-8 instead of Latin-1 encoding")
 parser.add_argument("--debug", action="store_true", help="Show debug output")
@@ -69,8 +70,8 @@ if __name__ == "__main__":
             show_qr_code(symbol)
         case "png":
             file_path = args.filename + "." + format
-            save_qr_code(symbol, file_path, args.transparent)
+            save_qr_code(symbol, file_path, args.transparent, min_width=args.width)
             print(f"QR code successfully saved to {file_path}.")
         case "copy":
-            copy_qr_code(symbol, args.transparent)
+            copy_qr_code(symbol, args.transparent, min_width=args.width)
             print("QR code succesfully copied to clipboard.")

@@ -80,7 +80,7 @@ def qr_to_matplotlib(symbol: Symbol, transparent: bool):
         cmap.set_bad(alpha=0)
     return image, cmap
 
-def qr_to_pillow(symbol: Symbol, transparent: bool) -> Image.Image:
+def qr_to_pillow(symbol: Symbol, transparent: bool, min_width: int) -> Image.Image:
     """Create a PIL image of the symbol."""
     luma = (~symbol).astype(np.uint8) * 255
     if transparent:
@@ -88,8 +88,8 @@ def qr_to_pillow(symbol: Symbol, transparent: bool) -> Image.Image:
     else:
         image = Image.fromarray(luma, mode="L")
 
-    # Upscale by an integer factor to at least 500x500 px
-    width = len(symbol) * (500 // len(symbol) + 1)
+    # Upscale by an integer factor to at least min_width x min_width px
+    width = len(symbol) * (1 + min_width // len(symbol))
     image = image.resize((width, width), Image.Resampling.NEAREST)
 
     return image
@@ -106,16 +106,16 @@ def show_qr_code(symbol: Symbol, transparent: bool = False):
     plt.show()
 
 
-def save_qr_code(symbol: Symbol, file_path: str, transparent: bool = False):
-    image = qr_to_pillow(symbol, transparent)
+def save_qr_code(symbol: Symbol, file_path: str, transparent: bool = False, min_width: int = 500):
+    image = qr_to_pillow(symbol, transparent, min_width)
     image.save(file_path)
 
 
-def copy_qr_code(symbol: Symbol, transparent: bool = False):
+def copy_qr_code(symbol: Symbol, transparent: bool = False, min_width: int = 500):
     if not COPY_ENABLED:
         raise ValueError(
             "Copying QR codes is not enabled. Reinstall using `pip install qrref[copy]` to enable."
         )
 
-    image = qr_to_pillow(symbol, transparent)
+    image = qr_to_pillow(symbol, transparent, min_width)
     pyperclipimg.copy(image)  # type: ignore[reportPossiblyUnboundVariable]

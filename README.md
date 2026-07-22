@@ -50,6 +50,42 @@ Copy the QR code to the clipboard (requires installing with `pip install qrref[c
 ```bash
 $ py -m qrref "https://wikipedia.org" --copy
 ```
+To control the size of the saved/copied image, use `-w/--width`. The image will be upscaled (by an integer factor) to at least this big. Use `-w 0` to get a pixel-perfect QR code.
+```bash
+$ py -m qrref "https://wikipedia.org" --copy -w 0
+```
+Run `py -m qrref -h` to see all arguments.
+```bash
+$ py -m qrref -h
+usage: python.exe -m qrref [-h] [-L | -M | -Q | -H] [-v VERSION] [--png | --show | --copy] [-f FILENAME] [-w WIDTH] [-t] [-u] [--debug] [content]
+
+Create a QR code and save, show or copy it.
+
+positional arguments:
+  content               What to encode in the QR code
+
+options:
+  -h, --help            show this help message and exit
+  -v, --version VERSION
+                        Which version (size) of QR code to use. By default, chooses the smallest one that the content fits in.
+  -f, --filename FILENAME
+                        Filename to save with
+  -w, --width WIDTH     Minimum width of the image, in pixels
+  -t, --transparent     Use transparent background
+  -u, --utf-8           Use UTF-8 instead of Latin-1 encoding
+  --debug               Show debug output
+
+Error correction level:
+  -L                    Low: 7 percent error correction
+  -M                    Medium: 15 percent error correction (default)
+  -Q                    Quartile: 25 percent error correction
+  -H                    High: 30 percent error correction
+
+How to save the QR code:
+  --png                 As PNG
+  --show                Show without saving (default)
+  --copy                Copy image to clipboard
+```
 
 # Reference details
 
